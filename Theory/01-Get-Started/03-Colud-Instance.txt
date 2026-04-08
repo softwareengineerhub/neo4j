@@ -1,0 +1,2 @@
+Go to Aura cloud
+https://console.neo4j.io/projects/ccf84aaa-fe50-41e1-81c8-e4fc46a9b278/instances

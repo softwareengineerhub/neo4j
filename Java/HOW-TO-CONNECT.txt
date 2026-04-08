@@ -1,0 +1,18 @@
+1. To run locally:
+neo4j/bin
+./ne04j start
+
+neo4j/bin
+bin\neo4j.bat console
+(java21 is required)
+access details could be found in application.properties
+
+Got to Web:
+http://localhost:7474/browser/
+neo4j/neo4j
+and change your password
+
+2. To run Aura cloud:
+https://console.ne04j.io/projects/ccf84aaa-fe50-41e1-81c8-e4fc46a9b278/instances
+access details could be found in application.properties
+

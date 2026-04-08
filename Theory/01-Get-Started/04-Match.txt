@@ -1,0 +1,53 @@
+Match
+
+1) is ok
+MATCH (p:Person) RETURN p;
+
+2)
+() - for nodes
+(:Person) - to specify the label of nodes
+()--() - for relationships with nodes
+MATCH (m:Movie) WHERE m.title='Cloud Atlas' RETURN m;
+
+3) You can use where or directly json filter:
+MATCH (m:Movie {title: 'Cloud Atlas'}) RETURN m;
+MATCH (m:Movie) WHERE m.title='Cloud Atlas' RETURN m;
+
+3)
+In Cypher, labels, property keys and variables are case-sensitive
+Cypher keywords are not case-sensitive.
+
+4) WHERE is more powerful
+
+MATCH (p:Person)
+WHERE p.name='Tom Hanks' OR p.name='Rita Wilson'
+RETURN p.name, p.born
+
+5) Outgoing direction from node ->
+MATCH (p:Person {name: 'Tom'})-[:ACTED_IN]->(m)
+return m.title
+
+MATCH (p:Person {name: 'Tom'})-[:ACTED_IN]->(m)
+return m,p
+
+is also valid:
+MATCH (p:Person {name: 'Tom'})-[:ACTED_IN]->()
+return p
+
+6) Here we do not specify type of nodes where actor was participated.
+It could be television or movie
+
+To filter label of nodes we can say:
+MATCH (p:Person {name: 'Tom'})-[:ACTED_IN]->(m:Movie)
+return m.title
+
+6) Task:
+a) you must be careful with direction of relationships: -> >-
+MATCH (m:Movie)<-[:ACTED_IN]-(p:Person) RETURN p,m
+
+b) next are same:
+There is a DIRECTED relationship between the Person nodes 
+and the Movie nodes - it represents the people who directed the movies.
+
+MATCH (m:Movie)<-[:DIRECTED]-(p:Person) RETURN p.name
+MATCH (m:Movie)<-[:DIRECTED]-(p) RETURN p.name

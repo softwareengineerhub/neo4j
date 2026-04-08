@@ -1,0 +1,40 @@
+Property of relationship:
+
+1) MATCH (p:Person {name: 'Michael Caine'})
+MERGE (m:Movie {title: 'Batman Begins'})
+MERGE (p)-[:ACTED_IN {roles: ['Alfred Penny']}]->(m)
+RETURN p,m
+
+2) update properties of relation via SET:
+MATCH (p:Person)-[r:ACTED_IN]->(m:Movie)
+WHERE p.name='Michael Caine' and m.title='The Dark Knight'
+SET r.roles=['Alfred Penny']
+RETURN p,m,r
+
+it overrides all r.roles, but if there were no such property it will create it
+So, upset logic
+
+3) 
+Set multiple properties via ,
+MATCH (p:Person)-[r:ACTED_IN]->(m:Movie)
+WHERE p.name='Michael Caine' and m.title='The Dark Knight'
+SET r.roles=['Alfred Penny'], m.released = 2008
+RETURN p,m,r
+
+You can SET props for nodes and relations
+
+4) Remoe properties:
+MATCH (p:Person)-[r:ACTED_IN]->(m:Movie)
+WHERE p.name='Michael Caine' and m.title='The Dark Knight'
+REMOVE r.roles
+return p,r,m
+
+Alternatively you can set this properties to null:
+MATCH (p:Person)
+WHERE p.name = 'Gene Hackman'
+SET p.born = null
+return p;
+
+Important!!!
+Protecting Primary Key Properties
+You should never remove the property that is used as the primary key for a node.

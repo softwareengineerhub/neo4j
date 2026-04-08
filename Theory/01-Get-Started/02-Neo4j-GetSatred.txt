@@ -1,0 +1,106 @@
+GQL - common standart for Graph db
+
+Cypher - Neo4j's implementation of GQL
+
+Pattern matching
+MATCH to read data
+MERGE to write data
+
+1) 
+MATCH (n:Person)
+WHERE n.nmae = 'Tom Hanks'
+return n
+
+You can return n.id, n.name
+And use them in where.
+
+Also you can:
+return n as ttt-> table will have column ttt
+
+In UI when you click on Node --> you can observe properties
+To see all relationships with other nodes --> double click on node
+
+2)
+Each Movie has unique title
+
+MATCH (m:Movie)<-[r:ACTED_IN]-(p:Person)
+WHERE m.title='Toy Story'
+RETURN m,r,p
+
+Select movie with specific name JOIN Person nodes on relation ACTED_IN
+Relation is from Person to Movie
+
+MATCH (m:Movie)-[r:IN_GENRE]->(g:Genre)
+WHERE m.title = 'Toy Story'
+RETURN m,r,g
+Select movie with specific name JOIN Ganre nodes on relation IN_GENRE
+Relation is from Movie to Genre
+
+
+MATCH (u:User)-[r:RATED]->(m:Movie)
+WHERE u.name = "Mr. Jason Love"
+RETURN u,r,m
+
+Find user with specific name and add all Movies where this user voted
+
+Each relation RATED has property rating=3.0
+So, we can add properties of relation to RETURN
+
+MATCH (u:User)-[r:RATED]->(m:Movie)
+WHERE u.name="Mr. Jason Love"
+RETURN u.name, r.rating, m.title
+
+Label - name of the node :Person, :Movie, :Actor
+Label:
+A) Purpose:
+They categories nodes, which improves query perfromance.
+B) Grouping and Structure:
+All nodes with the same label belong to a specific set.
+C) Constraint and indexes:
+Labels are required for defining uniqueness constraints and creating schema indexes.
+D) Multi-labeling:
+A single node can hold multiple labels (node can be both: Actor and Person)
+E) Usage in Queries:
+In Cypher, labels are used for filter nodes. 
+
+
+3) MERGE:
+Creates pattern only in case it does not exist
+MERGE (m:Movie {title: "Artur the King"})
+SET m.year = 2024
+RETURN m
+
+As a result you will have Movie with 2 properties: year, title
+This pattern creates a node with the label Movie and props year, title
+
+Link 2 nodes with relation:
+MERGE (m:Movie {title:"Artur the King"})
+MERGE (u:User {name:"Adam"})
+MERGE (u)-[r:RATED {rating:5}]->(m)
+RETURN u,r,m
+
+Running multiple times --> still relation will be created once
+
+1 by 1:
+3.1) MERGE (m:Movie {title: "DenysMovie"})
+3.2) MERGE (u:User {name: "Denys"})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

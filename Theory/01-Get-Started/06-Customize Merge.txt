@@ -1,0 +1,40 @@
+Customize MERGE:
+
+You can add SET based on some conditions:
+ON CREATE - in case this is creation of new data
+ON MATCH - this is update of existing
+
+1) Example:
+	//Find or create a person with this name
+	MERGE (p:Person {name:'McKenna Grace'})
+	
+	//Only set the 'createdAt' property if the node is created during this query
+	ON CREATE SET p.createdAt = datetime()
+	
+	//Only set the 'updatedAt' property if the node was created previously
+	ON MATCH SET p.updatedAt = datetime()
+	
+	//Set the 'born' property regardless
+	SET p.born = 2006
+	
+	RETURN p;
+	
+2) To set multiple values:
+ON CREATE SET m.released = 2020, m.tagline = 'A great ride!'
+
+3) You can use Merge to create or merge nodes, relationships:
+//Find or create a person with this name
+MERGE (p:Person {name: 'Michael Caine'})
+
+//Find or create a movie with this titlw
+MERGE (m:Movie {title: 'The Cider House Rules'})
+
+//Find or create a relationship between the two nodes
+MERGE (p)-[:ACTED_IN]->(m)
+
+4) Or do same in 1 query:
+MERGE (p:Person {name: 'Michael Caine'})-[:ACTED_IN]->(m:Movie {title: 'The Cider House Rules'})
+return p,m
+
+If Person is not presented - it will be created
+If movie is not presented - it will be created

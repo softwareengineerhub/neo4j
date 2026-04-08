@@ -1,0 +1,33 @@
+1) Delete
+By default, the delete operation will do a DETACH DELETE,
+which means it will first delete any relationships connected to the node before deleting the node itself.
+However, the node at the other end of the relationship will not get deleted.
+
+2) Repository:
+Spring Data Neo4j also implements a few standard methods, such as save, findById, findAll, and deleteById
+
+3)
+movieRepo.findAll(); - returns Node with Relationsa nd related Nodes
+
+it is equal to:
+@Query("MATCH (m:Movie)<-[r:ACTED_IN]-(p:Person)" +
+            "RETURN m, collect(r), collect(p) LIMIT 20;")
+    Iterable<Movie> findMoviesSubset();
+
+But if you just specify:
+@Query("MATCH (m:Movie)<-[r:ACTED_IN]-(p:Person)" +
+            "RETURN m LIMIT 20;")
+    Iterable<Movie> findMoviesSubsetNoRelations();
+Then only nodes and they properties would be returned, no relations
+
+
+4) Projection:
+Reducing database load for entities containing lots of properties that may not always be needed.
+-Interface based projections: MovieProjection - to get subset of return data
+Iterable<MovieProjection> findAllMovieProjectionsBy();
+
+-DTO-based projections really shine when you want to add additional properties to an entity: MovieDTOProjection
+@Query("MATCH (m:Movie)<-[r:ACTED_IN]-(p:Person) " +
+            "RETURN m, COUNT(p) AS castSize LIMIT 10;")
+    Iterable<MovieDTOProjection> findAllDTOProjectionsWithCustomQuery();
+
